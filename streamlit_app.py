@@ -11,7 +11,7 @@ st.set_page_config(
 )
 
 @st.cache_data
-def get_gdp_data():
+def get_ns_data():
    
     raw_ns_df = pd.read_csv('df_streamlit_updated.csv')
     ns_df = raw_ns_df.rename(columns = {"rdt_id" : "nb_disruptions"})
