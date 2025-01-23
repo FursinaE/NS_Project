@@ -5,52 +5,24 @@ import math
 from pathlib import Path
 import numpy as np
 
-# Set the title and favicon that appear in the Browser's tab bar.
 st.set_page_config(
     page_title='Disruption prediction',
-    page_icon=':train:', # This is an emoji shortcode. Could be a URL too.
+    page_icon=':train:'
 )
-
-# -----------------------------------------------------------------------------
-# Declare some useful functions.
 
 @st.cache_data
 def get_gdp_data():
-    """Grab GDP data from a CSV file.
+   
+    raw_ns_df = pd.read_csv('df_streamlit_updated.csv')
+    ns_df = raw_ns_df.rename(columns = {"rdt_id" : "nb_disruptions"})
 
-    This uses caching to avoid having to read the file every time. If we were
-    reading from an HTTP endpoint instead of a file, it's a good idea to set
-    a maximum age to the cache with the TTL argument: @st.cache_data(ttl='1d')
-    """
+    ns_df['start_time'] = pd.to_datetime(ns_df['start_time'])
+    ns_df['start_time'] = ns_df['start_time'].dt.date
 
-    # Instead of a CSV on disk, you could read from an HTTP endpoint here too.
-    DATA_FILENAME = Path(__file__).parent/'data/gdp_data.csv'
-    raw_gdp_df = pd.read_csv('df_streamlit_updated.csv')
+    return ns_df
 
-    #
-    # So let's pivot all those year-columns into two: Year and GDP
-    gdp_df = raw_gdp_df.rename(columns = {"rdt_id" : "nb_disruptions"})
+ns_df = get_ns_data()
 
-    # Convert years from string to integers
-    gdp_df['start_time'] = pd.to_datetime(gdp_df['start_time'])
-    gdp_df['start_time'] = gdp_df['start_time'].dt.date
-
-    return gdp_df
-
-gdp_df = get_gdp_data()
-
-
-
-# -----------------------------------------------------------------------------
-# Draw the actual page
-
-# Set the title that appears at the top of the page.
-'''
-# :train: Prediction of number of disruptions by NS
-
-'''
-
-# Add some spacing
 ''
 calender_2024 = pd.read_csv('Calender_2024.csv')
 
@@ -69,7 +41,7 @@ d = st.date_input(
 st.write('Selected date is:', d)
 
 
-provinces = np.sort(gdp_df['NUTS_2_0'].unique())
+provinces = np.sort(ns_df['NUTS_2_0'].unique())
 
 
 selected_province = st.multiselect(
@@ -82,32 +54,26 @@ selected_province = st.multiselect(
 if not len(selected_province):
     st.warning("Please select a province!")
 
-filtered_gdp_df = gdp_df[
-        (gdp_df['NUTS_2_0'].isin(selected_province))]
+filtered_ns_df = ns_df[
+        (ns_df['NUTS_2_0'].isin(selected_province))]
 
-stations = np.sort(filtered_gdp_df["name_long"].unique())
+stations = np.sort(filtered_ns_df["name_long"].unique())
 
 selected_stations = st.multiselect(
     'Which station are you intrested in?',
     stations)
 
-filtered_gdp_df_station = filtered_gdp_df[
-        (filtered_gdp_df['name_long'].isin(selected_stations))]
+filtered_ns_df_station = filtered_ns_df[
+        (filtered_ns_df['name_long'].isin(selected_stations))]
 ''
 if not len(selected_stations):
     st.warning("Please select a station!")
 
 else:
-    # Filter the data
-    #filtered_gdp_df = gdp_df[
-     #   (gdp_df['NUTS_2_0'].isin(selected_province))
-    # & (gdp_df['Year'] <= to_year)
-        # & (from_year <= gdp_df['Year'])
-    # ]
 
-    filtered_gdp_df_station["start_time"] = pd.DatetimeIndex(filtered_gdp_df_station["start_time"])
+    filtered_ns_df_station["start_time"] = pd.DatetimeIndex(filtered_ns_df_station["start_time"])
 
-    df_timeseries = filtered_gdp_df_station.resample("D", on = "start_time").agg({"nb_disruptions" : "nunique"}).reset_index()
+    df_timeseries = filtered_ns_df_station.resample("D", on = "start_time").agg({"nb_disruptions" : "nunique"}).reset_index()
 
 
     from prophet import Prophet
