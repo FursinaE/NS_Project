@@ -31,7 +31,7 @@ ns_df = get_ns_data()
 
 # Set the title that appears at the top of the page.
 '''
-# :train: Prediction of number of disruptions by NS
+# :train: Prediction 
 
 '''
 
