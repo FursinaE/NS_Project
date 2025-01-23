@@ -25,18 +25,12 @@ ns_df = get_ns_data()
 
 
 
-
-# -----------------------------------------------------------------------------
-# Draw the actual page
-
-# Set the title that appears at the top of the page.
 '''
-# :train: Prediction 
+# :train: Prediction of number of disruptions by NS
 
 '''
 
-# Add some spacing
-''
+
 
 ''
 calender_2024 = pd.read_csv('Calender_2024.csv')
