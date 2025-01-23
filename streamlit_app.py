@@ -26,6 +26,8 @@ ns_df = get_ns_data()
 '''
 # :train: Prediction of number of disruptions by NS
 
+Using NS data we try to predict number of disruptions which might potencially occur on specific date on specific NL station
+
 '''
 
 ''
