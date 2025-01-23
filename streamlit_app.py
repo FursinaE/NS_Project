@@ -23,14 +23,10 @@ def get_ns_data():
 
 ns_df = get_ns_data()
 
-
-
 '''
 # :train: Prediction of number of disruptions by NS
 
 '''
-
-
 
 ''
 calender_2024 = pd.read_csv('Calender_2024.csv')
