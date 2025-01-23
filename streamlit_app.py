@@ -10,7 +10,6 @@ st.set_page_config(
     page_icon=':train:',
 )
 
-
 @st.cache_data
 def get_ns_data():
    
@@ -23,6 +22,11 @@ def get_ns_data():
     return ns_df
 
 ns_df = get_ns_data()
+
+'''
+# :train: Prediction of number of disruptions by NS
+
+'''
 
 ''
 calender_2024 = pd.read_csv('Calender_2024.csv')
