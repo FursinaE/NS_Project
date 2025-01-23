@@ -7,8 +7,9 @@ import numpy as np
 
 st.set_page_config(
     page_title='Disruption prediction',
-    page_icon=':train:'
+    page_icon=':train:',
 )
+
 
 @st.cache_data
 def get_ns_data():
