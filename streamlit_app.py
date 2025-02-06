@@ -88,7 +88,7 @@ else:
     m = Prophet()
     m.fit(df_timeseries.rename(columns={"start_time": "ds", "nb_disruptions": "y"}))
 
-    future = m.make_future_dataframe(periods=500, freq="d")
+    future = m.make_future_dataframe(periods=1200, freq="d")
 
     forecast = m.predict(future)
 
